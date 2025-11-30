@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
   totalLoanApplications: ILoanApplicationResponse[] = [];
   totalAllLoanAmount: number = 0;
   totalLaon: number = 0;
+  //
   listInCompleteLoanFund: ILoanApplicationResponse[] = [];
   listLoanApplications: ILoanApplicationResponse[] = [];
   listCompletedAndInProcessLoanApplication: ILoanApplicationResponse[] = [];
