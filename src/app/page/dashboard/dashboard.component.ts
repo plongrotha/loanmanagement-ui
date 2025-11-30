@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   listLoanApplications: ILoanApplicationResponse[] = [];
   listCompletedAndInProcessLoanApplication: ILoanApplicationResponse[] = [];
 
+  //
   // pagination
   paginationData?: PaginatedLoanApplication<ILoanApplication>;
   totalLoanApplicationPagination: ILoanApplication[] = [];
