@@ -4,8 +4,8 @@ import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { LoanApplicationServiceService } from '../../core/service/loan-application-service.service';
 import { map } from 'rxjs';
 import {
-  ILoanApplication,
   ILoanApplicationRequest,
+  ILoanApplicationResponse,
 } from '../../core/model/interface/application.model';
 import { EEmploymentStatus, ELoanType } from '../../core/model/enum/loanType';
 
@@ -16,7 +16,7 @@ import { EEmploymentStatus, ELoanType } from '../../core/model/enum/loanType';
   styleUrls: ['./load-application.component.css'],
 })
 export class LoadApplicationComponent {
-  loanApplications: ILoanApplication[] = [];
+  loanApplications: ILoanApplicationResponse[] = [];
   loanTypes: string[] = [];
   loanType?: '';
   employmentStatus: string[] = [];
@@ -27,9 +27,9 @@ export class LoadApplicationComponent {
   totalPendingReviewApplications: number = 0;
   totalRejectedApplications: number = 0;
   selectedApplicationStatus: string = '';
-  filterApplicationStatus: ILoanApplication[] = [];
-  filterLoanType: ILoanApplication[] = [];
-  selected?: ILoanApplication | null = null;
+  filterApplicationStatus: ILoanApplicationResponse[] = [];
+  filterLoanType: ILoanApplicationResponse[] = [];
+  selected?: ILoanApplicationResponse | null = null;
 
   @ViewChild('newApplicationModal')
   newApplicationModal!: ElementRef<HTMLDialogElement>;
@@ -86,7 +86,7 @@ export class LoadApplicationComponent {
     }
   }
   // to open the modal dialog
-  openDetails(app: ILoanApplication) {
+  openDetails(app: ILoanApplicationResponse) {
     this.selected = app;
   }
   closeDetails() {

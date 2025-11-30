@@ -1,6 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LoanApplicationServiceService } from '../../core/service/loan-application-service.service';
-import { ILoanApplication } from '../../core/model/interface/application.model';
+import {
+  ILoanApplication,
+  ILoanApplicationResponse,
+  PaginatedLoanApplication,
+} from '../../core/model/interface/application.model';
 import { CurrencyPipe, DatePipe, NgClass, NgForOf } from '@angular/common';
 
 @Component({
@@ -11,12 +15,20 @@ import { CurrencyPipe, DatePipe, NgClass, NgForOf } from '@angular/common';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  totalLoanApplications: ILoanApplication[] = [];
+  totalLoanApplications: ILoanApplicationResponse[] = [];
   totalAllLoanAmount: number = 0;
   totalLaon: number = 0;
-  listInCompleteLoanFund: ILoanApplication[] = [];
-  listLoanApplications: ILoanApplication[] = [];
-  listCompletedAndInProcessLoanApplication: ILoanApplication[] = [];
+  listInCompleteLoanFund: ILoanApplicationResponse[] = [];
+  listLoanApplications: ILoanApplicationResponse[] = [];
+  listCompletedAndInProcessLoanApplication: ILoanApplicationResponse[] = [];
+
+  // pagination
+  paginationData?: PaginatedLoanApplication<ILoanApplication>;
+  totalLoanApplicationPagination: ILoanApplication[] = [];
+  dataCompletedAndInProcessLoanApplication: ILoanApplication[] = [];
+  page: number = 0;
+  size: number = 15;
+  totalPages: number = 0;
 
   constructor() {}
 
@@ -24,6 +36,38 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTotalLoanApplications();
+    this.getAllLoanApplicationsWithPagination();
+  }
+
+  getAllLoanApplicationsWithPagination(): void {
+    this.loanApplicationServiceService
+      .allLoanApplicationPigination(this.page, this.size)
+      .subscribe({
+        next: (res) => {
+          this.paginationData = res.data;
+          this.totalLoanApplicationPagination = this.paginationData.content;
+          this.totalPages = this.paginationData.totalPages;
+        },
+        error: (err) => {
+          console.log('Error fetching paginated loan applications', err);
+        },
+        complete: () => {
+          console.log('Fetched paginated loan applications successfully');
+        },
+      });
+  }
+
+  nextPage(): void {
+    if (this.page < this.totalPages - 1) {
+      this.page++;
+      this.getAllLoanApplicationsWithPagination();
+    }
+  }
+  previousPage(): void {
+    if (this.page > 0) {
+      this.page--;
+      this.getAllLoanApplicationsWithPagination();
+    }
   }
 
   loadTotalLoanApplications() {

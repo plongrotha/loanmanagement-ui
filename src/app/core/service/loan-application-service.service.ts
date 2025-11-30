@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../model/interface/ApiResponse.model';
 import {
   ILoanApplication,
   ILoanApplicationRequest,
+  ILoanApplicationResponse,
+  PaginatedLoanApplication,
 } from '../model/interface/application.model';
 
 @Injectable({
@@ -33,8 +35,8 @@ export class LoanApplicationServiceService {
   }
 
   // get all loan applications
-  getLoanApplications(): Observable<ApiResponse<ILoanApplication[]>> {
-    return this.http.get<ApiResponse<ILoanApplication[]>>(this.API_URL);
+  getLoanApplications(): Observable<ApiResponse<ILoanApplicationResponse[]>> {
+    return this.http.get<ApiResponse<ILoanApplicationResponse[]>>(this.API_URL);
   }
 
   createNewLoanApplication(
@@ -60,5 +62,17 @@ export class LoanApplicationServiceService {
   deleteLoanApplication(applicationId: number): Observable<ApiResponse<void>> {
     const url = `${this.API_URL}/${applicationId}`;
     return this.http.delete<ApiResponse<void>>(url);
+  }
+
+  allLoanApplicationPigination(
+    page: number = 0,
+    size: number = 10
+  ): Observable<ApiResponse<PaginatedLoanApplication<ILoanApplication>>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<
+      ApiResponse<PaginatedLoanApplication<ILoanApplication>>
+    >(this.API_URL + '/page', { params });
   }
 }

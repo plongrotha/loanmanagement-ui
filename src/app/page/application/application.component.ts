@@ -1,6 +1,9 @@
-import { Component, inject, NgModule, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ILoanApplication } from '../../core/model/interface/application.model';
+import {
+  ILoanApplication,
+  ILoanApplicationResponse,
+} from '../../core/model/interface/application.model';
 import { LoanApplicationServiceService } from '../../core/service/loan-application-service.service';
 import { map } from 'rxjs';
 interface Application {
@@ -17,11 +20,11 @@ interface Application {
   styleUrls: ['./application.component.css'],
 })
 export class ApplicationComponent implements OnInit {
-  applications: ILoanApplication[] = [];
+  applications: ILoanApplicationResponse[] = [];
   totalLoanApplicationsInComplet: number = 0;
-  filtered: ILoanApplication[] = [];
+  filtered: ILoanApplicationResponse[] = [];
   searchTerm = '';
-  selected?: ILoanApplication | null = null;
+  selected?: ILoanApplicationResponse | null = null;
 
   private loanApplicationServiceService = inject(LoanApplicationServiceService);
 
@@ -65,7 +68,7 @@ export class ApplicationComponent implements OnInit {
   clearSearch() {
     this.searchTerm = '';
   }
-  openDetails(app: ILoanApplication) {
+  openDetails(app: ILoanApplicationResponse) {
     this.selected = app;
   }
   closeDetails() {
