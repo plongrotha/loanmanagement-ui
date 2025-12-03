@@ -5,12 +5,18 @@ import {
   ILoanApplicationResponse,
   PaginatedLoanApplication,
 } from '../../core/model/interface/application.model';
-import { CurrencyPipe, DatePipe, NgClass, NgForOf } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+  NgClass,
+  NgForOf,
+  NgIf,
+} from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CurrencyPipe, DatePipe, NgClass, NgForOf],
+  imports: [CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -30,6 +36,20 @@ export class DashboardComponent implements OnInit {
   page: number = 0;
   size: number = 15;
   totalPages: number = 0;
+
+  //  view detail
+  isViewDetail: boolean = false;
+  selectedLoanApplication?: ILoanApplication | null;
+
+  toggleViewDetail(loanApplication: ILoanApplication | null): void {
+    this.isViewDetail = !this.isViewDetail;
+    this.selectedLoanApplication = loanApplication;
+  }
+
+  closeDetailView(): void {
+    this.isViewDetail = false;
+    this.selectedLoanApplication = null;
+  }
 
   constructor() {}
 

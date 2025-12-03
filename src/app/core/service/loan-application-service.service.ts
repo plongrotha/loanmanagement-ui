@@ -75,4 +75,10 @@ export class LoanApplicationServiceService {
       ApiResponse<PaginatedLoanApplication<ILoanApplication>>
     >(this.API_URL + '/page', { params });
   }
+
+  // get all loan applications approved today
+  getLoanThatApprovedToday(): Observable<ApiResponse<ILoanApplication[]>> {
+    const url = `${this.API_URL}/approved-today`;
+    return this.http.get<ApiResponse<ILoanApplication[]>>(url);
+  }
 }

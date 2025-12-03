@@ -16,7 +16,7 @@
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-xs uppercase font-medium">Total Users</p>
-          <p class="text-2xl font-bold text-gray-800 mt-1">1,543</p>
+          <p class="text-2xl font-bold text-gray-800 mt-1">{{ totalLoan }}</p>
           <p class="text-xs text-green-600 mt-1">+12% from last month</p>
         </div>
         <div class="bg-blue-100 rounded-full p-3">
@@ -44,7 +44,9 @@
           <p class="text-gray-500 text-xs uppercase font-medium">
             Active Loans
           </p>
-          <p class="text-2xl font-bold text-green-600 mt-1">342</p>
+          <p class="text-2xl font-bold text-green-600 mt-1">
+            {{ totalActiveLoan }}
+          </p>
           <p class="text-xs text-green-600 mt-1">+8% from last month</p>
         </div>
         <div class="bg-green-100 rounded-full p-3">
@@ -98,7 +100,9 @@
       <div class="flex items-center justify-between">
         <div>
           <p class="text-gray-500 text-xs uppercase font-medium">Pending</p>
-          <p class="text-2xl font-bold text-yellow-600 mt-1">89</p>
+          <p class="text-2xl font-bold text-yellow-600 mt-1">
+            {{ totalPendingLoan }}
+          </p>
           <p class="text-xs text-red-600 mt-1">Requires attention</p>
         </div>
         <div class="bg-yellow-100 rounded-full p-3">
@@ -256,34 +260,62 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
+              @for (loan of listApprovedTodayLoanApplications; track $index) {
               <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div
                       class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-semibold"
                     >
-                      JD
+                      {{
+                        loan.applicationResponse.applicantFullName
+                          .charAt(0)
+                          .toLocaleUpperCase() +
+                          loan.applicationResponse.applicantFullName
+                            .slice(-1)
+                            .toLocaleUpperCase()
+                      }}
                     </div>
                     <div class="ml-3">
-                      <p class="text-sm font-medium text-gray-900">John Doe</p>
-                      <p class="text-xs text-gray-500">johnEmail.com</p>
+                      <p class="text-sm font-medium text-gray-900">
+                        {{ loan.applicationResponse.applicantFullName }}
+                      </p>
+                      <p class="text-xs text-gray-500">
+                        {{ loan.applicationResponse.email }}
+                      </p>
                     </div>
                   </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  Personal
+                  {{ loan.loanType }}
                 </td>
                 <td
                   class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
                 >
-                  $15,000
+                  {{ loan.loanAmount | currency : "USD" : "symbol" : "1.0-0" }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+
+                <!-- at this to give the style we have 2 option  -->
+                <td class="px-4 py-4 whitespace-nowrap">
+                  <span [ngClass]="getStyle(loan)">{{
+                    loan.applicationStatus
+                  }}</span>
+                </td>
+                <!-- <td class="px-4 py-4 whitespace-nowrap">
                   <span
-                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800"
-                    >Pending</span
+                    [ngClass]="{
+                      'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800':
+                        item.applicationStatus == 'APPROVED',
+                      'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800':
+                        item.applicationStatus == 'PENDING',
+                      'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800':
+                        item.applicationStatus == 'REJECTED'
+                    }"
+                    >{{ item.applicationStatus }}</span
                   >
-                </td>
+                </td> -->
+                <!-- End -->
+
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                   <button
                     class="text-blue-600 hover:text-blue-900 cursor-pointer font-medium mr-2"
@@ -292,82 +324,7 @@
                   </button>
                 </td>
               </tr>
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div
-                      class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-semibold"
-                    >
-                      SM
-                    </div>
-                    <div class="ml-3">
-                      <p class="text-sm font-medium text-gray-900">
-                        Sarah Miller
-                      </p>
-                      <p class="text-xs text-gray-500">sarahemail.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  Business
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
-                >
-                  $50,000
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                    >Approved</span
-                  >
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <button
-                    class="text-blue-600 hover:text-blue-900 cursor-pointer font-medium mr-2"
-                  >
-                    View
-                  </button>
-                </td>
-              </tr>
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="flex items-center">
-                    <div
-                      class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-semibold"
-                    >
-                      RJ
-                    </div>
-                    <div class="ml-3">
-                      <p class="text-sm font-medium text-gray-900">
-                        Robert Jones
-                      </p>
-                      <p class="text-xs text-gray-500">robertemail.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  Home
-                </td>
-                <td
-                  class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
-                >
-                  $120,000
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"
-                    >Under Review</span
-                  >
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                  <button
-                    class="text-blue-600 hover:text-blue-900 cursor-pointer font-medium mr-2"
-                  >
-                    Review
-                  </button>
-                </td>
-              </tr>
+              }
             </tbody>
           </table>
         </div>
@@ -377,7 +334,7 @@
     <!-- Right Column - Activity & Notifications -->
     <div class="space-y-6">
       <!-- System Notifications -->
-      <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Notifications</h2>
         <div class="space-y-4">
           <div
@@ -462,10 +419,10 @@
         >
           View All Notifications
         </button>
-      </div>
+      </div> -->
 
       <!-- Recent Activity -->
-      <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Recent Activity</h2>
         <div class="space-y-4">
           <div class="flex items-center">
@@ -499,11 +456,11 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Quick Stats -->
       <div
-        class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-6 text-white"
+        class="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-6 text-white"
       >
         <h3 class="text-lg font-bold mb-4">Today's Summary</h3>
         <div class="space-y-3">
@@ -513,7 +470,7 @@
           </div>
           <div class="flex justify-between items-center">
             <span class="text-sm">Approved Today</span>
-            <span class="text-xl font-bold">8</span>
+            <span class="text-xl font-bold">{{ totalApprovedTodayLoan }}</span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-sm">Payments Received</span>
