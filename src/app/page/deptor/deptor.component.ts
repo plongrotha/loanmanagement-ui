@@ -27,6 +27,7 @@ export class DeptorComponent {
   totalAllLoanAmount: number = 0;
   totalLaon: number = 0;
   listInCompleteLoanFund: ILoanApplicationResponse[] = [];
+  listCompleteLoanFund: ILoanApplicationResponse[] = [];
   listLoanApplications: ILoanApplicationResponse[] = [];
   listCompletedAndInProcessLoanApplication: ILoanApplicationResponse[] = [];
   inProgressLoanApplication: ILoanApplication[] = [];
@@ -161,11 +162,11 @@ export class DeptorComponent {
           }
         });
 
-        this.listLoanApplications.filter((app) => {
-          if (app.loanRefundStatus === 'IN_PROGRESS') {
-            this.listInCompleteLoanFund.push(app);
-          }
-        });
+        // this.listLoanApplications.filter((app) => {
+        //   if (app.loanRefundStatus === 'IN_PROGRESS') {
+        //     this.listInCompleteLoanFund.push(app);
+        //   }
+        // });
 
         this.listCompletedAndInProcessLoanApplication.filter((app) => {
           if (

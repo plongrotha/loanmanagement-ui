@@ -4,6 +4,7 @@ import { LoadApplicationComponent } from './page/load-application/load-applicati
 import { MasterLayoutComponent } from './components/master-layout/master-layout.component';
 import { ApplicationComponent } from './page/application/application.component';
 import { DeptorComponent } from './page/deptor/deptor.component';
+import { AdminComponent } from './page/admin/admin.component';
 
 export const routes: Routes = [
   {
@@ -20,11 +21,6 @@ export const routes: Routes = [
     component: LoadApplicationComponent,
   },
   {
-    path: 'admin',
-    loadComponent: () =>
-      import('./page/admin/admin.component').then((m) => m.AdminComponent),
-  },
-  {
     path: 'application',
     component: ApplicationComponent,
   },
@@ -32,6 +28,8 @@ export const routes: Routes = [
     path: 'debtors',
     component: DeptorComponent,
   },
+
+  { path: 'admin', component: AdminComponent },
   {
     path: '**',
     component: NotFoundComponent,

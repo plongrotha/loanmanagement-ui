@@ -60,22 +60,23 @@
                 class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-semibold"
               >
                 {{
-                  loanApplication.application.applicantFullName
+                  loanApplication.applicationResponse.applicantFullName
                     .charAt(0)
                     .toUpperCase() +
-                    loanApplication.application.applicantFullName
+                    loanApplication.applicationResponse.applicantFullName
                       .charAt(
-                        loanApplication.application.applicantFullName.length - 1
+                        loanApplication.applicationResponse.applicantFullName
+                          .length - 1
                       )
                       .toUpperCase()
                 }}
               </div>
               <div class="ml-3">
                 <p class="text-sm font-medium text-gray-900">
-                  {{ loanApplication.application.applicantFullName }}
+                  {{ loanApplication.applicationResponse.applicantFullName }}
                 </p>
                 <p class="text-xs text-gray-500">
-                  {{ loanApplication.application.email }}
+                  {{ loanApplication.applicationResponse.email }}
                 </p>
               </div>
             </div>
