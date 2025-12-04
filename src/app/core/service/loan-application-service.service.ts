@@ -13,6 +13,7 @@ import {
   providedIn: 'root',
 })
 export class LoanApplicationServiceService {
+  // API URL's Spring Boot Backend
   private API_URL = 'http://localhost:8080/api/v1/loan-applications';
 
   private http = inject(HttpClient);
@@ -80,5 +81,13 @@ export class LoanApplicationServiceService {
   getLoanThatApprovedToday(): Observable<ApiResponse<ILoanApplication[]>> {
     const url = `${this.API_URL}/approved-today`;
     return this.http.get<ApiResponse<ILoanApplication[]>>(url);
+  }
+
+  // get all loan applications with refund completed
+  getAllLoanApplicationRefundCompleted(): Observable<
+    ApiResponse<ILoanApplicationResponse[]>
+  > {
+    const url = `${this.API_URL}/refund-completed`;
+    return this.http.get<ApiResponse<ILoanApplicationResponse[]>>(url);
   }
 }
