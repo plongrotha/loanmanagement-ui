@@ -110,7 +110,9 @@
       </h2>
     </div>
     <div class="overflow-x-auto">
+      <!-- start table -->
       <table class="w-full">
+        <!-- start thead -->
         <thead class="bg-gray-50">
           <!-- table head -->
           <tr>
@@ -156,109 +158,7 @@
             </th>
           </tr>
         </thead>
-        <!-- <tbody class="bg-white divide-y divide-gray-200">
-          @for (app of listLoanApplications; track $index) {
-          <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              #{{ app.application.applicationId }}
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-            >
-              {{ app.application.applicantFullName }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              {{ app.loanAmount | currency : "USD" : "symbol" : "1.0-0" }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              @if (app.paidAmount == 0) {
-              <span class="text-red-600 font-semibold">0</span>
-              }@else {
-              <span>{{
-                app.paidAmount | currency : "USD" : "symbol" : "1.0-0"
-              }}</span>
-              }
-            </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-medium"
-            >
-              {{
-                app.loanAmount - app.paidAmount
-                  | currency : "USD" : "symbol" : "1.0-0"
-              }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ app.createdAt | date : "yyyy-MM-dd" }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              @if (app.loanRefundStatus === "COMPLETED") {
-              <span
-                class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
-                >{{ app.loanRefundStatus }}</span
-              >
-              }@else {
-              <span
-                class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800"
-                >{{ app.loanRefundStatus }}</span
-              >
-              }
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-              <button class="text-blue-600 hover:text-blue-900">View</button>
-            </td>
-          </tr>
-          }
-        </tbody> -->
-
-        <!-- <tbody class="bg-white divide-y divide-gray-200">
-          <tr
-            *ngFor="
-              let app of listCompletedAndInProcessLoanApplication;
-              let i = index
-            "
-            class="hover:bg-gray-50"
-          >
-            <td>#{{ app.application.applicationId }}</td>
-            <td>{{ app.application.applicantFullName }}</td>
-            <td>
-              {{ app.loanAmount | currency : "USD" : "symbol" : "1.0-0" }}
-            </td>
-            <td>
-              <span
-                [ngClass]="{
-                  'text-red-600 font-semibold': app.paidAmount == 0
-                }"
-              >
-                {{
-                  app.paidAmount === 0
-                    ? "0"
-                    : (app.paidAmount | currency : "USD" : "symbol" : "1.0-0")
-                }}
-              </span>
-            </td>
-            <td class="text-red-600 font-medium">
-              {{
-                app.loanAmount - app.paidAmount
-                  | currency : "USD" : "symbol" : "1.0-0"
-              }}
-            </td>
-            <td>{{ app.createdAt | date : "yyyy-MM-dd" }}</td>
-            <td>
-              <span
-                [ngClass]="{
-                  'text-green-600 font-bold': app.loanRefundStatus === 'COMPLETED',
-                  'text-yellow-600 font-bold':
-                    app.loanRefundStatus === 'IN_PROGRESS',
-                }"
-                >{{ app.loanRefundStatus }}</span
-              >
-            </td>
-            <td>
-              <button class="text-blue-600 hover:text-blue-900">View</button>
-            </td>
-          </tr>
-        </tbody> -->
-
+        <!-- End thead -->
         <tbody class="bg-white divide-y divide-gray-200">
           <tr
             *ngFor="let app of totalLoanApplicationPagination; let i = index"
@@ -289,7 +189,7 @@
               }}
             </td>
             <td>
-              {{ app.applicationResponse.createdAt | date : "yyyy-MM-dd" }}
+              {{ app.updatedAt | date : "shortTime" }}
             </td>
             <td>
               <span
@@ -310,6 +210,12 @@
               </button>
             </td>
           </tr>
+          <!-- display when no loan applications or no have connection with backend -->
+          <!-- <tr *ngIf="loanApplicationCompletedAndInProgress.length == 0">
+            <td class="px-6 py-4 text-center text-sm text-gray-500" colspan="8">
+              No loan applications found.
+            </td>
+          </tr> -->
         </tbody>
       </table>
       <div
