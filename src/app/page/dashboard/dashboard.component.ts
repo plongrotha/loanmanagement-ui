@@ -12,6 +12,7 @@ import {
   NgForOf,
   NgIf,
 } from '@angular/common';
+import { TitleStrategy } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +25,10 @@ export class DashboardComponent implements OnInit {
   totalLoanApplications: ILoanApplicationResponse[] = [];
   totalAllLoanAmount: number = 0;
   totalLaon: number = 0;
+  totalInCompleteLoanFund: number = 0;
+  totalCompleteLoanFund: number = 0;
   //
+  listCompleteLoanFund: ILoanApplicationResponse[] = [];
   listInCompleteLoanFund: ILoanApplicationResponse[] = [];
   listLoanApplications: ILoanApplicationResponse[] = [];
   listCompletedAndInProcessLoanApplication: ILoanApplicationResponse[] = [];
@@ -35,7 +39,7 @@ export class DashboardComponent implements OnInit {
   totalLoanApplicationPagination: ILoanApplication[] = [];
   loanApplicationCompletedAndInProgress: ILoanApplication[] = [];
   page: number = 0;
-  size: number = 15;
+  size: number = 10;
   totalPages: number = 0;
 
   //  view detail
@@ -61,9 +65,11 @@ export class DashboardComponent implements OnInit {
     this.getAllLoanApplicationsWithPagination();
   }
 
+  // pagination method
   getAllLoanApplicationsWithPagination(): void {
     this.loanApplicationServiceService
       .allLoanApplicationPigination(this.page, this.size)
+
       .subscribe({
         next: (res) => {
           this.paginationData = res.data;
@@ -105,42 +111,38 @@ export class DashboardComponent implements OnInit {
     this.loanApplicationServiceService.getLoanApplications().subscribe({
       next: (res) => {
         this.listLoanApplications = res.data;
+        this.listCompletedAndInProcessLoanApplication =
+          this.listLoanApplications.filter((app) => {
+            return (
+              app.loanRefundStatus === 'COMPLETED' ||
+              app.loanRefundStatus === 'IN_PROGRESS'
+            );
+          });
 
-        this.listLoanApplications.filter((app) => {
-          if (
-            app.loanRefundStatus === 'COMPLETED' ||
-            app.loanRefundStatus === 'IN_PROGRESS'
-          ) {
-            this.totalLoanApplications.push(app);
+        // total loan application that owner has gave loan
+        this.totalLaon = this.listCompletedAndInProcessLoanApplication.length;
+
+        this.listInCompleteLoanFund = this.listLoanApplications.filter(
+          (app) => {
+            return app.loanRefundStatus === 'IN_PROGRESS';
           }
+        );
 
-          // this number of LoanApplication
-          this.totalLaon = this.totalLoanApplications.length;
+        this.listCompleteLoanFund = this.listLoanApplications.filter((app) => {
+          return app.loanRefundStatus === 'COMPLETED';
         });
 
-        this.listLoanApplications.filter((app) => {
-          if (
-            app.loanRefundStatus === 'COMPLETED' ||
-            app.loanRefundStatus === 'IN_PROGRESS'
-          ) {
-            this.listCompletedAndInProcessLoanApplication.push(app);
-          }
-        });
+        // total complete loan fund
+        this.totalCompleteLoanFund = this.listCompleteLoanFund.length;
+        // total incomplete loan fund
+        this.totalInCompleteLoanFund = this.listInCompleteLoanFund.length;
 
-        this.listLoanApplications.filter((app) => {
-          if (app.loanRefundStatus === 'IN_PROGRESS') {
-            this.listInCompleteLoanFund.push(app);
-          }
-        });
-
-        this.listCompletedAndInProcessLoanApplication.filter((app) => {
-          if (
-            app.loanRefundStatus === 'COMPLETED' ||
-            app.loanRefundStatus === 'IN_PROGRESS'
-          ) {
-            this.totalAllLoanAmount += app.loanAmount;
-          }
-        });
+        // total loan amount
+        this.totalAllLoanAmount =
+          this.listCompletedAndInProcessLoanApplication.reduce(
+            (sum, app) => sum + app.loanAmount,
+            0
+          );
       },
       error: (err) => {
         console.log('Error fetching total loan applications', err);
