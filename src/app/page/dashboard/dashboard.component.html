@@ -10,24 +10,24 @@
   </div>
 
   <!-- Section 1: Summary Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
     <!-- Total Debtor Applications -->
-    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+    <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-blue-500">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-gray-500 text-sm font-medium uppercase">
+          <p class="text-gray-500 text-xs font-medium uppercase">
             Total Applications
           </p>
-          <p class="text-3xl font-bold text-gray-800 mt-2">
+          <p class="text-2xl font-bold text-gray-800 mt-1">
             {{ totalLaon }}
           </p>
         </div>
-        <div class="bg-blue-100 rounded-full p-3">
+        <div class="bg-blue-100 rounded-full p-2">
           <svg
-            class="w-8 h-8 text-blue-500"
+            class="w-6 h-6 text-blue-500"
             fill="none"
             stroke="currentColor"
-            Box="0 0 24 24"
+            viewBox="0 0 24 24"
           >
             <path
               stroke-linecap="round"
@@ -38,23 +38,22 @@
           </svg>
         </div>
       </div>
-      <p class="text-green-600 text-sm mt-4">↑ 12% from last month</p>
     </div>
 
     <!-- Total Loan Money -->
-    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+    <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-green-500">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-gray-500 text-sm font-medium uppercase">
+          <p class="text-gray-500 text-xs font-medium uppercase">
             Total Loan Amount
           </p>
-          <p class="text-3xl font-bold text-gray-800 mt-2">
+          <p class="text-2xl font-bold text-gray-800 mt-1">
             {{ totalAllLoanAmount | currency : "USD" : "symbol" : "1.0-0" }}
           </p>
         </div>
-        <div class="bg-green-100 rounded-full p-3">
+        <div class="bg-green-100 rounded-full p-2">
           <svg
-            class="w-8 h-8 text-green-500"
+            class="w-6 h-6 text-green-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -68,23 +67,20 @@
           </svg>
         </div>
       </div>
-      <p class="text-green-600 text-sm mt-4">↑ 8% from last month</p>
     </div>
 
-    <!-- Incomplete Refunds -->
-    <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+    <!-- Completed Refunds -->
+    <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-purple-500">
       <div class="flex items-center justify-between">
         <div>
-          <p class="text-gray-500 text-sm font-medium uppercase">
-            Incomplete Refunds
-          </p>
-          <p class="text-3xl font-bold text-gray-800 mt-2">
-            {{ listInCompleteLoanFund.length }}
+          <p class="text-gray-500 text-xs font-medium uppercase">Completed</p>
+          <p class="text-2xl font-bold text-gray-800 mt-1">
+            {{ totalCompleteLoanFund }}
           </p>
         </div>
-        <div class="bg-red-100 rounded-full p-3">
+        <div class="bg-purple-100 rounded-full p-2">
           <svg
-            class="w-8 h-8 text-red-500"
+            class="w-6 h-6 text-purple-500"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -93,12 +89,40 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
         </div>
       </div>
-      <p class="text-red-600 text-sm mt-4">27% of total applications</p>
+    </div>
+
+    <!-- Incomplete Refunds -->
+    <div class="bg-white rounded-lg shadow-md p-4 border-l-4 border-red-500">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-gray-500 text-xs font-medium uppercase">
+            Incomplete Refunds
+          </p>
+          <p class="text-2xl font-bold text-gray-800 mt-1">
+            {{ totalInCompleteLoanFund }}
+          </p>
+        </div>
+        <div class="bg-red-100 rounded-full p-2">
+          <svg
+            class="w-6 h-6 text-red-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13. 856c1.54 0 2.502-1.667 1.732-3L13. 732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-. 77 1.333.192 3 1.732 3z"
+            ></path>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -284,7 +308,8 @@
         </div>
       </div>
       <button
-        class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-2 transition-colors"
+        (click)="closeDetailView()"
+        class="text-white hover:bg-opacity-20 hover:cursor-pointer rounded-full p-2 transition-colors"
       >
         <svg
           class="w-6 h-6"
