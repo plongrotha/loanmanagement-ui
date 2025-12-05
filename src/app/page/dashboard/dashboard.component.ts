@@ -74,6 +74,15 @@ export class DashboardComponent implements OnInit {
         next: (res) => {
           this.paginationData = res.data;
           this.totalLoanApplicationPagination = this.paginationData.content;
+
+          // filter loan applications with status COMPLETED or IN_PROGRESS
+          // this.loanApplicationCompletedAndInProgress =
+          //   this.totalLoanApplicationPagination.filter(
+          //     (app) =>
+          //       app.loanRefundStatus === 'COMPLETED' ||
+          //       app.loanRefundStatus === 'IN_PROGRESS'
+          //   );
+          // set total pages
           this.totalPages = this.paginationData.totalPages;
         },
         error: (err) => {
