@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
   // pagination
   paginationData?: PaginatedLoanApplication<ILoanApplication>;
   totalLoanApplicationPagination: ILoanApplication[] = [];
-  dataCompletedAndInProcessLoanApplication: ILoanApplication[] = [];
+  loanApplicationCompletedAndInProgress: ILoanApplication[] = [];
   page: number = 0;
   size: number = 15;
   totalPages: number = 0;
@@ -68,6 +68,15 @@ export class DashboardComponent implements OnInit {
         next: (res) => {
           this.paginationData = res.data;
           this.totalLoanApplicationPagination = this.paginationData.content;
+
+          // filter loan applications with status COMPLETED or IN_PROGRESS
+          // this.loanApplicationCompletedAndInProgress =
+          //   this.totalLoanApplicationPagination.filter(
+          //     (app) =>
+          //       app.loanRefundStatus === 'COMPLETED' ||
+          //       app.loanRefundStatus === 'IN_PROGRESS'
+          //   );
+          // set total pages
           this.totalPages = this.paginationData.totalPages;
         },
         error: (err) => {

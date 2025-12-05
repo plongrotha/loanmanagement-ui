@@ -5,11 +5,13 @@ import {
   ILoanApplicationResponse,
 } from '../../core/model/interface/application.model';
 import { map } from 'rxjs';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ButtonComponent } from '../../components/share/button/button.component';
 
 @Component({
   selector: 'app-admin',
-  imports: [CurrencyPipe, NgClass],
+  imports: [CurrencyPipe, NgClass, RouterLink, NgIf, ButtonComponent],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
 })
