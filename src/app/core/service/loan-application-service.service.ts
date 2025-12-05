@@ -61,7 +61,8 @@ export class LoanApplicationServiceService {
   }
 
   deleteLoanApplication(applicationId: number): Observable<ApiResponse<void>> {
-    const url = `${this.API_URL}/${applicationId}`;
+    // this api url for delete application first and then delete loan application if exists
+    const url = `http://localhost:8080/api/v1/applications/${applicationId}`;
     return this.http.delete<ApiResponse<void>>(url);
   }
 
