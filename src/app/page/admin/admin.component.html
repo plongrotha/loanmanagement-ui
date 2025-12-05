@@ -9,6 +9,12 @@
     </p>
   </div>
 
+  <div class="flex space-x-2">
+    <app-button variant="success">Save</app-button>
+    <app-button variant="danger">Delete</app-button>
+    <app-button variant="secondary">Update</app-button>
+  </div>
+
   <!-- Statistics Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     <!-- Total Users -->
@@ -132,6 +138,7 @@
       <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <!-- add user btn -->
           <button
             class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition"
           >
@@ -150,7 +157,7 @@
             </svg>
             <span class="text-xs font-medium text-gray-700">Add User</span>
           </button>
-
+          <!-- approve loans btn -->
           <button
             class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 cursor-pointer transition"
           >
@@ -169,7 +176,7 @@
             </svg>
             <span class="text-xs font-medium text-gray-700">Approve Loans</span>
           </button>
-
+          <!-- report btn -->
           <button
             class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 cursor-pointer transition"
           >
@@ -186,9 +193,11 @@
                 d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               ></path>
             </svg>
-            <span class="text-xs font-medium text-gray-700">Reports</span>
+            <a routerLink="/Reports">
+              <span class="text-xs font-medium text-gray-700">Report</span>
+            </a>
           </button>
-
+          <!-- setting btn -->
           <button
             class="flex flex-col items-center p-4 border-2 border-gray-200 rounded-lg hover:border-gray-500 hover:bg-gray-50 cursor-pointer transition"
           >
@@ -229,7 +238,9 @@
           </div>
         </div>
         <div class="overflow-x-auto">
+          <!-- start table -->
           <table class="w-full">
+            <!-- start thead -->
             <thead class="bg-gray-50">
               <tr>
                 <th
@@ -259,6 +270,9 @@
                 </th>
               </tr>
             </thead>
+            <!-- End thead -->
+
+            <!-- start tbody -->
             <tbody class="bg-white divide-y divide-gray-200">
               @for (loan of listApprovedTodayLoanApplications; track $index) {
               <tr class="hover:bg-gray-50">
@@ -301,21 +315,7 @@
                     loan.applicationStatus
                   }}</span>
                 </td>
-                <!-- <td class="px-4 py-4 whitespace-nowrap">
-                  <span
-                    [ngClass]="{
-                      'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800':
-                        item.applicationStatus == 'APPROVED',
-                      'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800':
-                        item.applicationStatus == 'PENDING',
-                      'px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800':
-                        item.applicationStatus == 'REJECTED'
-                    }"
-                    >{{ item.applicationStatus }}</span
-                  >
-                </td> -->
                 <!-- End -->
-
                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                   <button
                     class="text-blue-600 hover:text-blue-900 cursor-pointer font-medium mr-2"
@@ -325,8 +325,20 @@
                 </td>
               </tr>
               }
+
+              <!-- display when no recent applications found or disconnected with the server -->
+              <tr *ngIf="listApprovedTodayLoanApplications.length === 0">
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
+                  colspan="5"
+                >
+                  No recent applications found.
+                </td>
+              </tr>
             </tbody>
+            <!-- End tbody -->
           </table>
+          <!-- End table -->
         </div>
       </div>
     </div>
@@ -466,7 +478,7 @@
         <div class="space-y-3">
           <div class="flex justify-between items-center">
             <span class="text-sm">New Applications</span>
-            <span class="text-xl font-bold">12</span>
+            <span class="text-xl font-bold">0</span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-sm">Approved Today</span>
@@ -474,7 +486,7 @@
           </div>
           <div class="flex justify-between items-center">
             <span class="text-sm">Payments Received</span>
-            <span class="text-xl font-bold">$45,200</span>
+            <span class="text-xl font-bold">$0</span>
           </div>
         </div>
       </div>
