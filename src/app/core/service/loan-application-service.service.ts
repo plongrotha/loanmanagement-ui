@@ -91,4 +91,19 @@ export class LoanApplicationServiceService {
     const url = `${this.API_URL}/refund-completed`;
     return this.http.get<ApiResponse<ILoanApplicationResponse[]>>(url);
   }
+
+  getAllLoanApplicationRefundInProgressPagination(
+    page: number = 0,
+    size: number = 10
+  ): Observable<ApiResponse<PaginatedLoanApplication<ILoanApplication>>> {
+    const url = `${this.API_URL}/refund-in-progress`;
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<
+      ApiResponse<PaginatedLoanApplication<ILoanApplication>>
+    >(url, {
+      params,
+    });
+  }
 }

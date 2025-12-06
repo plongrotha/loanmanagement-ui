@@ -40,14 +40,15 @@ export class DeptorComponent {
 
   // pagination
   paginationData?: PaginatedLoanApplication<ILoanApplication>;
-  totalLoanApplicationPagination: ILoanApplication[] = [];
+  listLoanApplicationPagination: ILoanApplication[] = [];
   dataCompletedAndInProcessLoanApplication: ILoanApplication[] = [];
   page: number = 0;
-  size: number = 15;
+  size: number = 10;
   totalPages: number = 0;
   // selectedLoanApplicationId: number = 0;
   constructor() {
     this.getAllLoanApplicationsThatAreInProgress();
+    this.getAllLoanApplicationRefundInProgressWithPagination();
   }
 
   private loanApplicationServiceService = inject(LoanApplicationServiceService);
@@ -92,7 +93,6 @@ export class DeptorComponent {
       .subscribe({
         next: (res) => {
           this.inProgressLoanApplication = res;
-          console.log(this.inProgressLoanApplication);
           this.totalInProgress = this.inProgressLoanApplication.length;
         },
         error: (err) => {
@@ -104,82 +104,80 @@ export class DeptorComponent {
       });
   }
 
-  getAllLoanApplicationsWithPagination(): void {
-    this.loanApplicationServiceService
-      .allLoanApplicationPigination(this.page, this.size)
-      .subscribe({
-        next: (res) => {
-          this.paginationData = res.data;
-          this.totalLoanApplicationPagination = this.paginationData.content;
-          this.totalPages = this.paginationData.totalPages;
-          this.totalInProgress = this.inProgressLoanApplication.length;
-        },
-        error: (err) => {
-          console.log('Error fetching paginated loan applications', err);
-        },
-        complete: () => {
-          console.log('Fetched paginated loan applications successfully');
-        },
-      });
-  }
-
   nextPage(): void {
     if (this.page < this.totalPages - 1) {
       this.page++;
-      this.getAllLoanApplicationsWithPagination();
+      this.getAllLoanApplicationRefundInProgressWithPagination();
     }
   }
   previousPage(): void {
     if (this.page > 0) {
       this.page--;
-      this.getAllLoanApplicationsWithPagination();
+      this.getAllLoanApplicationRefundInProgressWithPagination();
     }
   }
 
-  loadTotalLoanApplications() {
-    this.loanApplicationServiceService.getLoanApplications().subscribe({
-      next: (res) => {
-        this.listLoanApplications = res.data;
+  // loadTotalLoanApplications() {
+  //   this.loanApplicationServiceService.getLoanApplications().subscribe({
+  //     next: (res) => {
+  //       this.listLoanApplications = res.data;
 
-        this.listLoanApplications.filter((app) => {
-          if (
-            app.loanRefundStatus === 'COMPLETED' ||
-            app.loanRefundStatus === 'IN_PROGRESS'
-          ) {
-            this.totalLoanApplications.push(app);
-          }
+  //       this.listLoanApplications.filter((app) => {
+  //         if (
+  //           app.loanRefundStatus === 'COMPLETED' ||
+  //           app.loanRefundStatus === 'IN_PROGRESS'
+  //         ) {
+  //           this.totalLoanApplications.push(app);
+  //         }
 
-          // this number of LoanApplication
-          this.totalLaon = this.totalLoanApplications.length;
-        });
+  //         // this number of LoanApplication
+  //         this.totalLaon = this.totalLoanApplications.length;
+  //       });
 
-        this.listLoanApplications.filter((app) => {
-          if (
-            app.loanRefundStatus === 'COMPLETED' ||
-            app.loanRefundStatus === 'IN_PROGRESS'
-          ) {
-            this.listCompletedAndInProcessLoanApplication.push(app);
-          }
-        });
+  //       this.listLoanApplications.filter((app) => {
+  //         if (
+  //           app.loanRefundStatus === 'COMPLETED' ||
+  //           app.loanRefundStatus === 'IN_PROGRESS'
+  //         ) {
+  //           this.listCompletedAndInProcessLoanApplication.push(app);
+  //         }
+  //       });
 
-        // this.listLoanApplications.filter((app) => {
-        //   if (app.loanRefundStatus === 'IN_PROGRESS') {
-        //     this.listInCompleteLoanFund.push(app);
-        //   }
-        // });
+  //       // this.listLoanApplications.filter((app) => {
+  //       //   if (app.loanRefundStatus === 'IN_PROGRESS') {
+  //       //     this.listInCompleteLoanFund.push(app);
+  //       //   }
+  //       // });
 
-        this.listCompletedAndInProcessLoanApplication.filter((app) => {
-          if (
-            app.loanRefundStatus === 'COMPLETED' ||
-            app.loanRefundStatus === 'IN_PROGRESS'
-          ) {
-            this.totalAllLoanAmount += app.loanAmount;
-          }
-        });
-      },
-      error: (err) => {
-        console.log('Error fetching total loan applications', err);
-      },
-    });
+  //       this.listCompletedAndInProcessLoanApplication.filter((app) => {
+  //         if (
+  //           app.loanRefundStatus === 'COMPLETED' ||
+  //           app.loanRefundStatus === 'IN_PROGRESS'
+  //         ) {
+  //           this.totalAllLoanAmount += app.loanAmount;
+  //         }
+  //       });
+  //     },
+  //     error: (err) => {
+  //       console.log('Error fetching total loan applications', err);
+  //     },
+  //   });
+  // }
+
+  getAllLoanApplicationRefundInProgressWithPagination(): void {
+    this.loanApplicationServiceService
+      .getAllLoanApplicationRefundInProgressPagination(this.page, this.size)
+      .subscribe({
+        next: (res) => {
+          this.paginationData = res.data;
+          this.listLoanApplicationPagination = this.paginationData.content;
+          console.log(this.listLoanApplicationPagination);
+          this.totalPages = this.paginationData.totalPages;
+          console.log(this.totalPages);
+        },
+        error: (err) => {
+          console.log('Error fetching paginated loan applications', err);
+        },
+      });
   }
 }
