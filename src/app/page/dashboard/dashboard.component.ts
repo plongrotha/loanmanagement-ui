@@ -12,7 +12,6 @@ import {
   NgForOf,
   NgIf,
 } from '@angular/common';
-import { TitleStrategy } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -69,20 +68,10 @@ export class DashboardComponent implements OnInit {
   getAllLoanApplicationsWithPagination(): void {
     this.loanApplicationServiceService
       .allLoanApplicationPigination(this.page, this.size)
-
       .subscribe({
         next: (res) => {
           this.paginationData = res.data;
           this.totalLoanApplicationPagination = this.paginationData.content;
-
-          // filter loan applications with status COMPLETED or IN_PROGRESS
-          // this.loanApplicationCompletedAndInProgress =
-          //   this.totalLoanApplicationPagination.filter(
-          //     (app) =>
-          //       app.loanRefundStatus === 'COMPLETED' ||
-          //       app.loanRefundStatus === 'IN_PROGRESS'
-          //   );
-          // set total pages
           this.totalPages = this.paginationData.totalPages;
         },
         error: (err) => {
@@ -127,6 +116,8 @@ export class DashboardComponent implements OnInit {
             return app.loanRefundStatus === 'IN_PROGRESS';
           }
         );
+        // total incomplete loan fund
+        this.totalInCompleteLoanFund = this.listInCompleteLoanFund.length;
 
         this.listCompleteLoanFund = this.listLoanApplications.filter((app) => {
           return app.loanRefundStatus === 'COMPLETED';
@@ -134,8 +125,6 @@ export class DashboardComponent implements OnInit {
 
         // total complete loan fund
         this.totalCompleteLoanFund = this.listCompleteLoanFund.length;
-        // total incomplete loan fund
-        this.totalInCompleteLoanFund = this.listInCompleteLoanFund.length;
 
         // total loan amount
         this.totalAllLoanAmount =
