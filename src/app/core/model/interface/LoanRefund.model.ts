@@ -12,3 +12,8 @@ export interface ILoanRefund {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ILoanRefundRequest {
+  loanApplicationId: number;
+  refundAmount: number;
+}

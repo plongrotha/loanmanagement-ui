@@ -14,11 +14,24 @@ import {
 } from '@angular/common';
 import { DeptorServiceService } from '../../core/service/deptor-service.service';
 import { map } from 'rxjs';
-import { ILoanRefund } from '../../core/model/interface/LoanRefund.model';
+import {
+  ILoanRefund,
+  ILoanRefundRequest,
+} from '../../core/model/interface/LoanRefund.model';
+import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from '../../components/share/button/button.component';
 
 @Component({
   selector: 'app-deptor',
-  imports: [NgClass, CurrencyPipe, DatePipe, NgForOf, NgIf],
+  imports: [
+    NgClass,
+    CurrencyPipe,
+    DatePipe,
+    NgForOf,
+    NgIf,
+    FormsModule,
+    ButtonComponent,
+  ],
   templateUrl: './deptor.component.html',
   styleUrls: ['./deptor.component.css'],
 })
@@ -45,6 +58,12 @@ export class DeptorComponent {
   page: number = 0;
   size: number = 10;
   totalPages: number = 0;
+
+  // refuning activity
+  isRefuning = false;
+  refundAmount: number = 0;
+  totalRefundAmount: number = 0;
+
   // selectedLoanApplicationId: number = 0;
   constructor() {
     this.getAllLoanApplicationsThatAreInProgress();
@@ -54,7 +73,40 @@ export class DeptorComponent {
   private loanApplicationServiceService = inject(LoanApplicationServiceService);
   private deptorServiceService = inject(DeptorServiceService);
 
-  ngOnInit(): void {}
+  refundReq: ILoanRefundRequest = {
+    loanApplicationId: 0,
+    refundAmount: this.refundAmount,
+  };
+
+  modalPosition = { x: 0, y: 0 };
+  openModelRefund(loan: ILoanApplication, event: MouseEvent): void {
+    this.modalPosition = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+    this.refundReq = {
+      loanApplicationId: loan.loanApplicationId,
+      refundAmount: this.refundAmount,
+    };
+    this.isRefuning = true;
+  }
+  closeRefundModal() {
+    this.isRefuning = false;
+  }
+
+  createRefund() {
+    this.deptorServiceService.createLoanRefund(this.refundReq).subscribe({
+      next: () => {
+        this.refundReq.refundAmount = 0;
+        this.getAllLoanApplicationRefundInProgressWithPagination();
+        this.getAllRefundByLoanApplicationId(this.refundReq.loanApplicationId);
+        console.log('Refund is successful');
+      },
+      error: (err) => {
+        console.log('Error refuning : ' + err.status);
+      },
+    });
+  }
 
   onViewDdetails(loan: ILoanApplication): void {
     this.IsselectedView = true;
@@ -76,6 +128,11 @@ export class DeptorComponent {
       .subscribe({
         next: (res) => {
           this.listOfLoanRefunds = res;
+          this.totalRefundAmount = this.listOfLoanRefunds.reduce(
+            (acc, refund) => acc + refund.refundAmount,
+            0
+          );
+          console.log(this.totalRefundAmount);
         },
         error: (err) => {
           console.log('Error fetching loan refunds', err);
@@ -171,9 +228,7 @@ export class DeptorComponent {
         next: (res) => {
           this.paginationData = res.data;
           this.listLoanApplicationPagination = this.paginationData.content;
-          console.log(this.listLoanApplicationPagination);
           this.totalPages = this.paginationData.totalPages;
-          console.log(this.totalPages);
         },
         error: (err) => {
           console.log('Error fetching paginated loan applications', err);
