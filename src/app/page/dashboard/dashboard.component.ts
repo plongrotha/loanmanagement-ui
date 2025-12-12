@@ -12,11 +12,21 @@ import {
   NgForOf,
   NgIf,
 } from '@angular/common';
+import { CardComponent } from '../../components/share/card/card.component';
+import { TableComponent } from '../../components/share/table/table.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf],
+  imports: [
+    CurrencyPipe,
+    DatePipe,
+    NgClass,
+    NgForOf,
+    NgIf,
+    CardComponent,
+    TableComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -26,6 +36,16 @@ export class DashboardComponent implements OnInit {
   totalLaon: number = 0;
   totalInCompleteLoanFund: number = 0;
   totalCompleteLoanFund: number = 0;
+  col: string[] = [
+    'ID',
+    'Debtor Name',
+    'Loan Amount',
+    'Paid Amount',
+    'Remaining',
+    'Application Date',
+    'Status',
+    'Actions',
+  ];
   //
   listCompleteLoanFund: ILoanApplicationResponse[] = [];
   listInCompleteLoanFund: ILoanApplicationResponse[] = [];

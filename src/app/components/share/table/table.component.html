@@ -1,0 +1,93 @@
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+  <div class="overflow-x-auto">
+    <!-- start table -->
+    <table class="w-full">
+      <!-- start thead -->
+      <thead class="bg-gray-50">
+        <!-- table head -->
+        <tr>
+          @for (item of COLUMN_DEFINITIONS; track $index) {
+          <th
+            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+          >
+            {{ item }}
+          </th>
+          }
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr class="hover:bg-gray-50">
+          @for (item of data; track $index) {
+          <td [ngClass]="classStyle">
+            {{ item }}
+          </td>
+          }
+        </tr>
+      </tbody>
+      <!-- End thead -->
+      <!-- <tbody class="bg-white divide-y divide-gray-200">
+        <tr
+          *ngFor="let app of inProgressLoanApplication; let i = index"
+          class="hover:bg-gray-50"
+        >
+          <td>#{{ app.applicationResponse.applicationId }}</td>
+          <td>{{ app.applicationResponse.applicantFullName }}</td>
+          <td>
+            {{ app.loanAmount | currency : "USD" : "symbol" : "1.0-0" }}
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                'text-red-600 font-semibold': app.paidAmount == 0
+              }"
+            >
+              {{
+                app.paidAmount === 0
+                  ? "0"
+                  : (app.paidAmount | currency : "USD" : "symbol" : "1.2-2")
+              }}
+            </span>
+          </td>
+          <td class="text-red-600 font-medium">
+            {{
+              app.loanAmount - app.paidAmount
+                | currency : "USD" : "symbol" : "1.2-2"
+            }}
+          </td>
+          <td>
+            {{ app.updatedAt | date : "shortTime" }}
+          </td>
+          <td>
+            <span
+              [ngClass]="{
+                     'text-yellow-600 font-bold':
+                       app.loanRefundStatus === 'IN_PROGRESS',
+                   }"
+              >{{ app.loanRefundStatus }}</span
+            >
+          </td>
+          <td class="space-x-4">
+            <button
+              (click)="onViewDdetails(app)"
+              class="text-blue-600 hover:text-blue-900 cursor-pointer"
+            >
+              View
+            </button>
+            <button
+              (click)="openModelRefund(app, $event)"
+              class="text-green-600 hover:text-green-900 cursor-pointer"
+            >
+              Refund
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="inProgressLoanApplication.length == 0">
+          <td class="px-6 py-4 text-center text-sm text-gray-500" colspan="8">
+            No loan applications found.
+          </td>
+        </tr>
+      </tbody> -->
+    </table>
+    <!-- end table -->
+  </div>
+</div>

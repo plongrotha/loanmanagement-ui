@@ -1,0 +1,23 @@
+<div
+  class="bg-white rounded-lg shadow-md p-4 border-l-4 flex items-center justify-between"
+  [ngClass]="[accentBorderClass, containerClass]"
+  (click)="onClick()"
+  [attr.role]="clickable ? 'button' : null"
+  [attr.tabindex]="clickable ? 0 : null"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick()"
+>
+  <div>
+    <p class="text-gray-500 text-xs font-medium uppercase">
+      {{ label }}
+    </p>
+    <p class="text-2xl font-bold text-gray-800 mt-1">
+      {{ value }}
+    </p>
+  </div>
+
+  <div [ngClass]="iconBgClass" class="rounded-full p-2">
+    <!-- icon projected here -->
+    <ng-content select="[card-icon]"></ng-content>
+  </div>
+</div>
