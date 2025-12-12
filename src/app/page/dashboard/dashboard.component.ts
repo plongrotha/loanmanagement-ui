@@ -116,8 +116,6 @@ export class DashboardComponent implements OnInit {
             return app.loanRefundStatus === 'IN_PROGRESS';
           }
         );
-        // total incomplete loan fund
-        this.totalInCompleteLoanFund = this.listInCompleteLoanFund.length;
 
         this.listCompleteLoanFund = this.listLoanApplications.filter((app) => {
           return app.loanRefundStatus === 'COMPLETED';
@@ -125,6 +123,8 @@ export class DashboardComponent implements OnInit {
 
         // total complete loan fund
         this.totalCompleteLoanFund = this.listCompleteLoanFund.length;
+        // total incomplete loan fund
+        this.totalInCompleteLoanFund = this.listInCompleteLoanFund.length;
 
         // total loan amount
         this.totalAllLoanAmount =
