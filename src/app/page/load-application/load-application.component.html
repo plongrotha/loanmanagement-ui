@@ -278,7 +278,7 @@
             >
               {{
                 loanApplication.loanAmount
-                  | currency : "USD" : "symbol" : "1.0-0"
+                  | currency : "USD" : "symbol" : "1.2-2"
               }}
             </td>
             @if (loanApplication.loanDurationInMonths == null) {
@@ -363,6 +363,7 @@
       </table>
     </div>
 
+    <!--  pagination -->
     <div
       class="px-4 py-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4"
     >
@@ -605,7 +606,7 @@
         <div class="p-4 bg-purple-50 rounded-lg border border-purple-100">
           <p class="text-xs text-gray-500 uppercase font-medium">Loan Amount</p>
           <p class="text-gray-900 font-semibold">
-            {{ selected.loanAmount | currency }}
+            {{ selected.loanAmount | currency : "USD" : "symbol" : "1.2-2" }}
           </p>
         </div>
 

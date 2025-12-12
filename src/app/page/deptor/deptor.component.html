@@ -1,8 +1,8 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden">
+<div class="bg-white rounded-lg max-h-screen shadow-md overflow-hidden">
   <div class="container mx-auto border px-6 py-4 border-b border-gray-200">
     <h2 class="text-xl font-semibold text-gray-800">All Debtor Applications</h2>
   </div>
-  <div class="container mx-auto">
+  <div class="container mx-auto max-h-screen overflow-y-auto p-6">
     <div
       class="px-6 py-4 border-b border-gray-200 flex items-center justify-between"
     >
@@ -66,7 +66,7 @@
           <!-- End thead -->
           <tbody class="bg-white divide-y divide-gray-200">
             <tr
-              *ngFor="let app of listLoanApplicationPagination; let i = index"
+              *ngFor="let app of inProgressLoanApplication; let i = index"
               class="hover:bg-gray-50"
             >
               <td>#{{ app.applicationResponse.applicationId }}</td>
@@ -83,14 +83,14 @@
                   {{
                     app.paidAmount === 0
                       ? "0"
-                      : (app.paidAmount | currency : "USD" : "symbol" : "1.0-0")
+                      : (app.paidAmount | currency : "USD" : "symbol" : "1.2-2")
                   }}
                 </span>
               </td>
               <td class="text-red-600 font-medium">
                 {{
                   app.loanAmount - app.paidAmount
-                    | currency : "USD" : "symbol" : "1.0-0"
+                    | currency : "USD" : "symbol" : "1.2-2"
                 }}
               </td>
               <td>
@@ -105,30 +105,37 @@
                   >{{ app.loanRefundStatus }}</span
                 >
               </td>
-              <td>
+              <!-- Action Buttons -->
+              <td class="space-x-4">
                 <button
                   (click)="onViewDdetails(app)"
-                  class="text-blue-600 hover:text-blue-900"
+                  class="text-blue-600 hover:text-blue-900 cursor-pointer"
                 >
                   View
+                </button>
+                <button
+                  (click)="openModelRefund(app, $event)"
+                  class="text-green-600 hover:text-green-900 cursor-pointer"
+                >
+                  Refund
                 </button>
               </td>
             </tr>
             <!-- display when no loan applications or no have connection with backend -->
-            <tr *ngIf="listLoanApplicationPagination.length == 0">
+            <!-- <tr *ngIf="listLoanApplicationPagination.length == 0">
               <td
                 class="px-6 py-4 text-center text-sm text-gray-500"
                 colspan="8"
               >
                 No loan applications found.
               </td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
         <!-- end table -->
 
-        <!--  -->
-        <div
+        <!-- pagination  -->
+        <!-- <div
           class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between"
         >
           <div class="text-sm text-gray-700">
@@ -138,7 +145,6 @@
             results
           </div>
 
-          <!-- btn previous and next -->
           <div class="flex gap-2">
             <button
               (click)="previousPage()"
@@ -153,7 +159,7 @@
               Next
             </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -197,82 +203,177 @@
         </div>
       </div>
 
-      <!-- Refund Table -->
+      <!-- Refund card -->
       <div class="bg-white rounded-lg shadow-md overflow-hidden mt-10">
-        <div class="p-6 border-b border-gray-200">
-          <h2 class="text-xl font-bold text-gray-800">Refund History</h2>
-        </div>
         <div class="flex flex-col gap-4 p-6">
-          <!-- Refund Card -->
-          <div
-            *ngFor="let refund of listOfLoanRefunds"
-            class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-          >
-            <div class="flex flex-wrap items-center justify-between gap-4">
-              <div class="flex items-center gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Refund ID</p>
-                  <p class="text-sm font-bold text-gray-900">
-                    #{{ refund.loanRefundId }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Application ID</p>
-                  <p class="text-sm text-gray-700">
-                    #{{ refund.loanApplicationId }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Paid Amount</p>
-                  <p class="text-lg font-bold text-gray-900">
-                    {{
-                      refund.paidAmount | currency : "USD" : "symbol" : "1.0-0"
-                    }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Remain Amount</p>
-                  <p class="text-lg font-bold text-gray-900">
-                    {{
-                      refund.remainAmount
-                        | currency : "USD" : "symbol" : "1.0-0"
-                    }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Total Amount</p>
-                  <p class="text-lg font-bold text-gray-900">
-                    {{
-                      refund.totalLoanAmount
-                        | currency : "USD" : "symbol" : "1.0-0"
-                    }}
-                  </p>
-                </div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Latest Refunded</p>
-                  <p class="text-sm text-gray-700">
-                    {{ refund.refundRequestedDate | date : "medium" }}
-                  </p>
-                </div>
-                <div>
-                  <p class="text-xs text-gray-500 uppercase">Initiated</p>
-                  <p class="text-sm text-gray-700">
-                    {{ refund.refundInitiatedDate | date : "medium" }}
-                  </p>
-                </div>
-              </div>
-            </div>
+          <!-- Compact scrollable refund history table with Tailwind CSS -->
+          <div class="my-5">
+            <div class="flex justify-between items-center">
+              <h3 class="text-lg font-semibold text-gray-800">
+                Refund History
+              </h3>
 
-            <div *ngIf="refund.refundAmount == 0">
-              <p class="text-red-600 font-semibold mt-2">
-                No payments have been made yet.
-              </p>
+              <h3 class="font-bold">
+                Total Refund :
+                <span class="text-green-600">
+                  {{
+                    totalRefundAmount | currency : "USD" : "symbol" : "1.2-2"
+                  }}</span
+                >
+              </h3>
+            </div>
+            <div
+              class="overflow-auto max-h-96 border border-gray-200 rounded-lg bg-white"
+            >
+              <table class="w-full text-sm border-collapse min-w-[800px]">
+                <thead class="sticky top-0 bg-gray-50 z-10">
+                  <tr>
+                    <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Refund ID
+                    </th>
+                    <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Application ID
+                    </th>
+                    <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Paid
+                    </th>
+                    <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Remaining
+                    </th>
+                    <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Total
+                    </th>
+                    <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Latest Refund
+                    </th>
+                    <!-- <th
+                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
+                    >
+                      Initiated
+                    </th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let refund of listOfLoanRefunds"
+                    class="hover:bg-gray-50 transition-colors"
+                  >
+                    <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      #{{ refund.loanRefundId }}
+                    </td>
+                    <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      #{{ refund.loanApplicationId }}
+                    </td>
+                    <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      {{
+                        refund.refundAmount
+                          | currency : "USD" : "symbol" : "1.2-2"
+                      }}
+                    </td>
+                    <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      {{
+                        refund.remainAmount
+                          | currency : "USD" : "symbol" : "1.0-0"
+                      }}
+                    </td>
+                    <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      {{
+                        refund.totalLoanAmount
+                          | currency : "USD" : "symbol" : "1.0-0"
+                      }}
+                    </td>
+                    <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      {{ refund.refundRequestedDate | date : "short" }}
+                    </td>
+                    <!-- <td
+                      class="px-3 py-2.5 border-b border-gray-100 text-gray-800"
+                    >
+                      {{ refund.refundInitiatedDate | date : "short" }}
+                    </td> -->
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Empty state -->
+              <div *ngIf="listOfLoanRefunds.length == 0">
+                <p class="text-red-600 font-semibold text-center mt-2">
+                  No payments have been made yet.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Refund Modal -->
+<div
+  *ngIf="isRefuning"
+  [style.position]="'fixed'"
+  [style.top.px]="modalPosition.y"
+  [style.left.px]="modalPosition.x"
+  [style.transform]="'translateY(-100%)'"
+  [style.z-index]="1000"
+  class="w-[300px] border border-gray-200 rounded-lg shadow-sm bg-white p-6 mb-[30px]"
+>
+  <h1>#{{ refundReq.loanApplicationId }}</h1>
+  <div class="space-y-2">
+    <label for="refundAmount" class="block text-sm font-medium text-gray-700">
+      Enter Refund Amount
+    </label>
+    <div class="relative">
+      <span
+        class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 pointer-events-none"
+      >
+        $
+      </span>
+      <input
+        id="refundAmount"
+        [(ngModel)]="refundReq.refundAmount"
+        class="border border-gray-300 rounded-md p-2 w-full pl-7 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+        type="number"
+        step="0.01"
+        min="1"
+        placeholder="0.00"
+        aria-label="Refund Amount"
+      />
+    </div>
+    <p class="text-xs text-gray-500">Enter the amount you wish to refund</p>
+  </div>
+
+  <!-- button -->
+  <div class="flex space-x-2 mt-2">
+    <app-button [variant]="'primary'" (click)="createRefund()">
+      Process Refund
+    </app-button>
+    <app-button [variant]="'danger'" (click)="closeRefundModal()"
+      >close</app-button
+    >
   </div>
 </div>

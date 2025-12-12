@@ -48,7 +48,7 @@
             Total Loan Amount
           </p>
           <p class="text-2xl font-bold text-gray-800 mt-1">
-            {{ totalAllLoanAmount | currency : "USD" : "symbol" : "1.0-0" }}
+            {{ totalAllLoanAmount | currency : "USD" : "symbol" : "1.2-2" }}
           </p>
         </div>
         <div class="bg-green-100 rounded-full p-2">
@@ -135,48 +135,48 @@
     </div>
     <div class="overflow-x-auto">
       <!-- start table -->
-      <table class="w-full">
+      <table class="w-full border-collapse">
         <!-- start thead -->
         <thead class="bg-gray-50">
           <!-- table head -->
           <tr>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               ID
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Debtor Name
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Loan Amount
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Paid Amount
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Remaining
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Application Date
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Status
             </th>
             <th
-              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Action
             </th>
@@ -188,12 +188,16 @@
             *ngFor="let app of totalLoanApplicationPagination; let i = index"
             class="hover:bg-gray-50"
           >
-            <td>#{{ app.applicationResponse.applicationId }}</td>
-            <td>{{ app.applicationResponse.applicantFullName }}</td>
-            <td>
-              {{ app.loanAmount | currency : "USD" : "symbol" : "1.0-0" }}
+            <td class="border border-gray-300 text-left">
+              #{{ app.applicationResponse.applicationId }}
             </td>
-            <td>
+            <td class="border border-gray-300">
+              {{ app.applicationResponse.applicantFullName }}
+            </td>
+            <td class="border border-gray-300 text-left">
+              {{ app.loanAmount | currency : "USD" : "symbol" : "1.2-2" }}
+            </td>
+            <td class="border border-gray-300">
               <span
                 [ngClass]="{
                   'text-red-600 font-semibold': app.paidAmount == 0
@@ -202,49 +206,57 @@
                 {{
                   app.paidAmount === 0
                     ? "0"
-                    : (app.paidAmount | currency : "USD" : "symbol" : "1.0-0")
+                    : (app.paidAmount | currency : "USD" : "symbol" : "1.2-2")
                 }}
               </span>
             </td>
-            <td class="text-red-600 font-medium">
+            <td
+              class="border border-gray-300 text-left"
+              [ngClass]="{
+                'text-green-700 font-medium':
+                  app.loanAmount - app.paidAmount === 0,
+                'text-red-600 font-medium': app.loanAmount - app.paidAmount > 0
+              }"
+              ,
+            >
               {{
                 app.loanAmount - app.paidAmount
-                  | currency : "USD" : "symbol" : "1.0-0"
+                  | currency : "USD" : "symbol" : "1.2-2"
               }}
             </td>
-            <td>
-              {{ app.updatedAt | date : "shortTime" }}
+            <td class="border border-gray-300 text-left">
+              {{ app.updatedAt | date : "medium" }}
             </td>
-            <td>
+            <td class="border border-gray-300 text-left">
               <span
                 [ngClass]="{
-                  'text-green-600 font-bold': app.loanRefundStatus === 'COMPLETED',
+                  'text-green-700 font-bold': app.loanRefundStatus === 'COMPLETED',
                   'text-yellow-600 font-bold':
                     app.loanRefundStatus === 'IN_PROGRESS',
                 }"
                 >{{ app.loanRefundStatus }}</span
               >
             </td>
-            <td>
+            <td class="border border-gray-300 text-center">
               <button
                 (click)="toggleViewDetail(app)"
-                class="text-blue-600 hover:text-blue-900"
+                class="text-blue-600 hover:text-blue-900 cursor-pointer font-medium"
               >
                 View
               </button>
             </td>
           </tr>
           <!-- display when no loan applications or no have connection with backend -->
-          <!-- <tr *ngIf="loanApplicationCompletedAndInProgress.length == 0">
+          <tr *ngIf="totalLoanApplicationPagination.length == 0">
             <td class="px-6 py-4 text-center text-sm text-gray-500" colspan="8">
               No loan applications found.
             </td>
-          </tr> -->
+          </tr>
         </tbody>
       </table>
       <!-- end table -->
 
-      <!--  -->
+      <!-- pagination -->
       <div
         class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between"
       >
@@ -419,7 +431,7 @@
             <p class="text-2xl font-bold text-blue-700">
               {{
                 selectedLoanApplication?.loanAmount
-                  | currency : "USD" : "symbol" : "1.0-0"
+                  | currency : "USD" : "symbol" : "1.2-2"
               }}
             </p>
           </div>
@@ -430,7 +442,7 @@
             <p class="text-2xl font-bold text-green-700">
               {{
                 selectedLoanApplication?.paidAmount
-                  | currency : "USD" : "symbol" : "1.0-0"
+                  | currency : "USD" : "symbol" : "1.2-2"
               }}
             </p>
           </div>
@@ -442,7 +454,7 @@
               {{
                 (selectedLoanApplication?.loanAmount || 0) -
                   (selectedLoanApplication?.paidAmount || 0)
-                  | currency : "USD" : "symbol" : "1.0-0"
+                  | currency : "USD" : "symbol" : "1.2-2"
               }}
             </p>
           </div>

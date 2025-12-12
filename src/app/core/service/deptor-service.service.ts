@@ -6,7 +6,10 @@ import {
   ILoanApplication,
   ILoanApplicationResponse,
 } from '../model/interface/application.model';
-import { ILoanRefund } from '../model/interface/LoanRefund.model';
+import {
+  ILoanRefund,
+  ILoanRefundRequest,
+} from '../model/interface/LoanRefund.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +22,10 @@ export class DeptorServiceService {
 
   constructor() {}
   private http = inject(HttpClient);
+
+  fetch<T>(url: string): Observable<ApiResponse<T[]>> {
+    return this.http.get<ApiResponse<T[]>>(url);
+  }
 
   getAllLoanApplicationsThatAreInProgress(): Observable<
     ApiResponse<ILoanApplication[]>
@@ -34,5 +41,13 @@ export class DeptorServiceService {
     return this.http.get<ApiResponse<ILoanRefund[]>>(
       `${this.API_URL_REFUND}/loan/${id}`
     );
+  }
+
+  // make refund request
+  createLoanRefund(
+    request: ILoanRefundRequest
+  ): Observable<ApiResponse<ILoanRefund>> {
+    const url = 'http://localhost:8080/api/v1/refund-application';
+    return this.http.post<ApiResponse<ILoanRefund>>(url, request);
   }
 }
