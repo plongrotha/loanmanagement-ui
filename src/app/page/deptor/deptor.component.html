@@ -122,44 +122,17 @@
               </td>
             </tr>
             <!-- display when no loan applications or no have connection with backend -->
-            <!-- <tr *ngIf="listLoanApplicationPagination.length == 0">
+            <tr *ngIf="inProgressLoanApplication.length == 0">
               <td
                 class="px-6 py-4 text-center text-sm text-gray-500"
                 colspan="8"
               >
                 No loan applications found.
               </td>
-            </tr> -->
+            </tr>
           </tbody>
         </table>
         <!-- end table -->
-
-        <!-- pagination  -->
-        <!-- <div
-          class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between"
-        >
-          <div class="text-sm text-gray-700">
-            Showing <span class="font-medium">{{ page * size + 1 }}</span> to
-            <span class="font-medium">{{ (page + 1) * size }}</span> of
-            <span class="font-medium">{{ paginationData?.totalElements }}</span>
-            results
-          </div>
-
-          <div class="flex gap-2">
-            <button
-              (click)="previousPage()"
-              class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
-            >
-              Previous
-            </button>
-            <button
-              (click)="nextPage()"
-              class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
-            >
-              Next
-            </button>
-          </div>
-        </div> -->
       </div>
     </div>
 
@@ -258,11 +231,6 @@
                     >
                       Latest Refund
                     </th>
-                    <!-- <th
-                      class="px-3 py-2.5 text-left font-semibold text-gray-600 border-b-2 border-gray-300 whitespace-nowrap"
-                    >
-                      Initiated
-                    </th> -->
                   </tr>
                 </thead>
                 <tbody>
