@@ -7,11 +7,10 @@ import {
 import { map } from 'rxjs';
 import { CurrencyPipe, NgClass, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ButtonComponent } from '../../components/share/button/button.component';
 
 @Component({
   selector: 'app-admin',
-  imports: [CurrencyPipe, NgClass, RouterLink, NgIf, ButtonComponent],
+  imports: [CurrencyPipe, NgClass, RouterLink, NgIf],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
 })

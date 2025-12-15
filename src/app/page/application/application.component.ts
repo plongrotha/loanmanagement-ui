@@ -1,9 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ILoanApplication,
-  ILoanApplicationResponse,
-} from '../../core/model/interface/application.model';
+import { ILoanApplicationResponse } from '../../core/model/interface/application.model';
 import { LoanApplicationServiceService } from '../../core/service/loan-application-service.service';
 import { map } from 'rxjs';
 interface Application {

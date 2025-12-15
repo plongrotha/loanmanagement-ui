@@ -66,7 +66,7 @@
           <!-- End thead -->
           <tbody class="bg-white divide-y divide-gray-200">
             <tr
-              *ngFor="let app of inProgressLoanApplication; let i = index"
+              *ngFor="let app of listLoanApplicationPagination; let i = index"
               class="hover:bg-gray-50"
             >
               <td>#{{ app.applicationResponse.applicationId }}</td>
@@ -121,8 +121,9 @@
                 </button>
               </td>
             </tr>
+
             <!-- display when no loan applications or no have connection with backend -->
-            <tr *ngIf="inProgressLoanApplication.length == 0">
+            <tr *ngIf="listLoanApplicationPagination.length == 0">
               <td
                 class="px-6 py-4 text-center text-sm text-gray-500"
                 colspan="8"
@@ -132,6 +133,33 @@
             </tr>
           </tbody>
         </table>
+        <!-- pagination  -->
+        <div
+          class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between"
+        >
+          <div class="text-sm text-gray-700">
+            Showing
+            <span class="font-medium">{{ page * size + 1 }}</span> to
+            <span class="font-medium">{{ (page + 1) * size }}</span> of
+            <span class="font-medium">{{ paginationData?.totalElements }}</span>
+            results
+          </div>
+
+          <div class="flex gap-2">
+            <button
+              (click)="previousPage()"
+              class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
+            >
+              Previous
+            </button>
+            <button
+              (click)="nextPage()"
+              class="px-3 py-1 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
+            >
+              Next
+            </button>
+          </div>
+        </div>
         <!-- end table -->
       </div>
     </div>

@@ -174,53 +174,6 @@ export class DeptorComponent {
     }
   }
 
-  // loadTotalLoanApplications() {
-  //   this.loanApplicationServiceService.getLoanApplications().subscribe({
-  //     next: (res) => {
-  //       this.listLoanApplications = res.data;
-
-  //       this.listLoanApplications.filter((app) => {
-  //         if (
-  //           app.loanRefundStatus === 'COMPLETED' ||
-  //           app.loanRefundStatus === 'IN_PROGRESS'
-  //         ) {
-  //           this.totalLoanApplications.push(app);
-  //         }
-
-  //         // this number of LoanApplication
-  //         this.totalLaon = this.totalLoanApplications.length;
-  //       });
-
-  //       this.listLoanApplications.filter((app) => {
-  //         if (
-  //           app.loanRefundStatus === 'COMPLETED' ||
-  //           app.loanRefundStatus === 'IN_PROGRESS'
-  //         ) {
-  //           this.listCompletedAndInProcessLoanApplication.push(app);
-  //         }
-  //       });
-
-  //       // this.listLoanApplications.filter((app) => {
-  //       //   if (app.loanRefundStatus === 'IN_PROGRESS') {
-  //       //     this.listInCompleteLoanFund.push(app);
-  //       //   }
-  //       // });
-
-  //       this.listCompletedAndInProcessLoanApplication.filter((app) => {
-  //         if (
-  //           app.loanRefundStatus === 'COMPLETED' ||
-  //           app.loanRefundStatus === 'IN_PROGRESS'
-  //         ) {
-  //           this.totalAllLoanAmount += app.loanAmount;
-  //         }
-  //       });
-  //     },
-  //     error: (err) => {
-  //       console.log('Error fetching total loan applications', err);
-  //     },
-  //   });
-  // }
-
   getAllLoanApplicationRefundInProgressWithPagination(): void {
     this.loanApplicationServiceService
       .getAllLoanApplicationRefundInProgressPagination(this.page, this.size)

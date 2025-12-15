@@ -13,20 +13,11 @@ import {
   NgIf,
 } from '@angular/common';
 import { CardComponent } from '../../components/share/card/card.component';
-import { TableComponent } from '../../components/share/table/table.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
-    CurrencyPipe,
-    DatePipe,
-    NgClass,
-    NgForOf,
-    NgIf,
-    CardComponent,
-    TableComponent,
-  ],
+  imports: [CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf, CardComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
